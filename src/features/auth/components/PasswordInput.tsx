@@ -1,38 +1,77 @@
 "use client";
 
-import { useState } from "react";
+import * as React from "react";
+import { Eye, EyeOff, Lock } from "lucide-react";
 
-import { Eye, EyeOff } from "lucide-react";
-
-import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 
 interface PasswordInputProps
-    extends React.InputHTMLAttributes<HTMLInputElement> {}
+    extends React.ComponentProps<typeof Input> {}
 
-export function PasswordInput(props: PasswordInputProps) {
-    const [showPassword, setShowPassword] = useState(false);
+export function PasswordInput({
+    className,
+    ...props
+}: PasswordInputProps) {
+    const [showPassword, setShowPassword] = React.useState(false);
 
     return (
-        <div className="relative">
+        <div className="group relative">
+            {/* Left Icon */}
+            <Lock
+                size={18}
+                className="
+                    absolute
+                    left-4
+                    top-1/2
+                    z-10
+                    -translate-y-1/2
+                    text-zinc-500
+                    transition-colors
+                    group-focus-within:text-violet-400
+                "
+            />
+
             <Input
                 {...props}
                 type={showPassword ? "text" : "password"}
+                className={cn(
+                    `
+                    h-12
+                    rounded-xl
+                    border-white/10
+                    bg-white/5
+                    pl-12
+                    pr-12
+                    text-white
+                    placeholder:text-zinc-500
+                    transition-all
+                    duration-300
+
+                    focus-visible:border-violet-500
+                    focus-visible:bg-white/10
+                    focus-visible:ring-2
+                    focus-visible:ring-violet-500/20
+
+                    hover:border-white/20
+                    `,
+                    className
+                )}
             />
 
-            <Button
+            <button
                 type="button"
-                variant="ghost"
-                size="icon"
-                className="absolute right-2 top-1/2 -translate-y-1/2"
-                onClick={() => setShowPassword((prev) => !prev)}
+                onClick={() =>
+                    setShowPassword((prev) => !prev)
+                }
+           className="absolute right-4 top-1/2 z-10 -translate-y-1/2 text-zinc-500 transition-colors hover:text-white"
             >
                 {showPassword ? (
-                    <EyeOff className="h-4 w-4" />
+                    <EyeOff size={18} />
                 ) : (
-                    <Eye className="h-4 w-4" />
+                    <Eye size={18} />
                 )}
-            </Button>
+            </button>
         </div>
     );
 }

@@ -1,5 +1,13 @@
-// features/auth/components/LoginForm.tsx
+import { AuthCard } from "./AuthCard";
+import { PasswordInput } from "./PasswordInput";
 
 export function LoginForm() {
-    return <div>Login Form</div>;
+    return (
+        <AuthCard
+            title="Welcome Back"
+            description="Login"
+        >
+            <PasswordInput placeholder="Password" />
+        </AuthCard>
+    );
 }

@@ -31,6 +31,20 @@ interface AuthState {
     initializeSession: () => Promise<void>;
 
     clearError: () => void;
+    
+    forgotPassword: (
+    email: string
+    ) => Promise<boolean>;
+    
+    resetPassword: (
+    password: string
+    ) => Promise<boolean>;
+
+//     exchangeRecoveryCode: (
+//     code: string
+// ) => Promise<boolean>;
+
+    subscribeToAuthChanges: () => () => void;
 }
 
 export const authStore = create<AuthState>((set) => ({
@@ -135,6 +149,84 @@ console.log("SESSION:", data.session);
 
     return true;
 },
+async forgotPassword(email) {
+
+    set({
+        loading: true,
+        error: null,
+    });
+
+    const { error } =
+        await authService.forgotPassword(email);
+
+    if (error) {
+
+        set({
+            loading: false,
+            error: error.message,
+        });
+
+        return false;
+    }
+
+    set({
+        loading: false,
+        error: null,
+    });
+
+    return true;
+
+},
+// async exchangeRecoveryCode(code) {
+
+//     const { data, error } =
+//         await authService.exchangeRecoveryCode(code);
+
+//     if (error) {
+
+//         set({
+//             error: error.message,
+//         });
+
+//         return false;
+//     }
+
+//     set({
+//         session: data.session,
+//         user: data.user,
+//         error: null,
+//     });
+
+//     return true;
+// },
+async resetPassword(password) {
+
+    set({
+        loading: true,
+        error: null,
+    });
+
+    const { error } =
+        await authService.resetPassword(password);
+
+    if (error) {
+
+        set({
+            loading: false,
+            error: error.message,
+        });
+
+        return false;
+    }
+
+    set({
+        loading: false,
+        error: null,
+    });
+
+    return true;
+
+},
 
     async logout() {
 
@@ -159,6 +251,30 @@ console.log("SESSION:", data.session);
         });
 
     },
+ subscribeToAuthChanges() {
+
+    const {
+        data: { subscription },
+    } = sessionService.onAuthStateChange(
+        async (_event, session) => {
+
+            set({
+                session,
+                user: session?.user ?? null,
+            });
+
+        }
+    );
+
+    return () => {
+
+        subscription.unsubscribe();
+
+    };
+
+
+
+},
 
     clearError() {
 

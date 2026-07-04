@@ -37,9 +37,33 @@ class AuthService {
         });
     }
 
-    async logout() {
+   
+    async forgotPassword(email: string) {
+
+    return await supabase.auth.resetPasswordForEmail(
+        email,
+        {
+           redirectTo:
+                `${window.location.origin}/auth/callback`
+        }
+    );
+
+}
+// async exchangeRecoveryCode(code: string) {
+//     return await supabase.auth.exchangeCodeForSession(code);
+// }
+
+async resetPassword(password: string) {
+
+    return await supabase.auth.updateUser({
+        password,
+    });
+
+}
+ async logout() {
         return await supabase.auth.signOut();
     }
 }
+
 
 export const authService = new AuthService();

@@ -7,7 +7,7 @@ import { useForm, type SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { AuthCard } from "./AuthCard";
-import { OAuthButtons } from "./OAuthButtons";
+//import { OAuthButtons } from "./OAuthButtons";
 import { PasswordInput } from "./PasswordInput";
 
 import {
@@ -51,6 +51,7 @@ const loading = authStore((state) => state.loading);
 const error = authStore((state) => state.error);
 
 const clearError = authStore((state) => state.clearError);
+
   
     const onSubmit: SubmitHandler<LoginFormValues> =
         async (data) => {
@@ -60,7 +61,7 @@ const clearError = authStore((state) => state.clearError);
 
            
     if (success) {
-        router.push("/dashboard");
+        router.replace("/dashboard");
     }
     
         };
@@ -252,7 +253,7 @@ const clearError = authStore((state) => state.clearError);
 
                 {/* Divider */}
 
-                <div className="flex items-center gap-4">
+                {/* <div className="flex items-center gap-4">
 
                     <Separator className="flex-1 bg-white/10" />
 
@@ -262,11 +263,11 @@ const clearError = authStore((state) => state.clearError);
 
                     <Separator className="flex-1 bg-white/10" />
 
-                </div>
+                </div> */}
 
                 {/* OAuth */}
 
-                <OAuthButtons />
+                {/* <OAuthButtons /> */}
 
                 {/* Footer */}
 

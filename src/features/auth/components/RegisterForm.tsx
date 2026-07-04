@@ -12,10 +12,10 @@ import {
 } from "../validations/register.schema";
 
 import { authStore } from "@/stores/auth.store";
-
+import {toast} from "sonner";
 import { AuthCard } from "./AuthCard";
 import { PasswordInput } from "./PasswordInput";
-import { OAuthButtons } from "./OAuthButtons";
+//import { OAuthButtons } from "./OAuthButtons";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -76,6 +76,9 @@ export function RegisterForm() {
             });
 
             if (success) {
+                toast.success(
+    "Account created successfully! Please verify your email."
+);
                 router.push("/login");
             }
         };
@@ -300,7 +303,7 @@ export function RegisterForm() {
 
                 {/* Divider */}
 
-                <div className="flex items-center gap-4">
+                {/* <div className="flex items-center gap-4">
 
                     <Separator className="flex-1" />
 
@@ -310,11 +313,11 @@ export function RegisterForm() {
 
                     <Separator className="flex-1" />
 
-                </div>
+                </div> */}
 
                 {/* OAuth */}
 
-                <OAuthButtons />
+                {/* <OAuthButtons /> */}
 
                 {/* Footer */}
 

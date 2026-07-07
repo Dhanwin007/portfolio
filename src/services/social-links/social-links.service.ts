@@ -3,7 +3,6 @@
 import { supabase } from "@/lib/supabase/client";
 
 import type {
-    SocialLinks,
     UpdateSocialLinksPayload,
 } from "@/features/social-links/types";
 
@@ -38,21 +37,30 @@ class SocialLinksService {
 
         }
 
+        const profile =
+            await supabase
+                .from("profiles")
+                .select("id")
+                .eq("user_id", user.id)
+                .single();
+
+        if (profile.error) {
+
+            return {
+                data: null,
+                error: profile.error,
+            };
+
+        }
+
         return await supabase
             .from("social_links")
             .select("*")
             .eq(
                 "profile_id",
-
-                (
-                    await supabase
-                        .from("profiles")
-                        .select("id")
-                        .eq("user_id", user.id)
-                        .single()
-                ).data?.id
+                profile.data.id
             )
-            .single();
+            .maybeSingle();
 
     }
 
@@ -104,11 +112,14 @@ class SocialLinksService {
 
         return await supabase
             .from("social_links")
-            .update(payload)
-            .eq(
-                "profile_id",
-                profile.data.id
-            )
+            .upsert({
+
+                profile_id:
+                    profile.data.id,
+
+                ...payload,
+
+            })
             .select()
             .single();
 
@@ -148,7 +159,7 @@ class SocialLinksService {
                 "profile_id",
                 profile.data.id
             )
-            .single();
+            .maybeSingle();
 
     }
 

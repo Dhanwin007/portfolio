@@ -168,6 +168,54 @@ class PortfolioSettingsService {
             throw error;
         }
     }
+    // ==========================
+// Public Portfolio
+// ==========================
+
+async getPublicPortfolioSettings(
+    username: string
+) {
+
+    const profile =
+        await supabase
+
+            .from("profiles")
+
+            .select("id")
+
+            .eq(
+                "username",
+                username
+            )
+
+            .single();
+
+    if (profile.error) {
+
+        return {
+
+            data: null,
+
+            error: profile.error,
+
+        };
+
+    }
+
+    return await supabase
+
+        .from("portfolio_settings")
+
+        .select("*")
+
+        .eq(
+            "profile_id",
+            profile.data.id
+        )
+
+        .maybeSingle();
+
+}
 }
 
 export const portfolioSettingsService =
